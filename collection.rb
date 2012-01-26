@@ -24,7 +24,7 @@ require 'json'
 
 # collection skin
 # NB. that if you set this value, then you will need the following patch 
-# to display skins for pooled content items:
+# to display skins for pooled content items: https://github.com/payten/3akai-ux/tree/customstylesforcontent
 # 
 #@collection_skin = "/dev/skins/nyu/nyu.liberalstudies.skin.css"
 
