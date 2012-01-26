@@ -131,8 +131,25 @@ def createCollection(id, user_id)
 		
 	# POST to createfile
     response = prim_post("/system/pool/createfile", formData)
-    json = JSON.parse(response.body())
-    return json["_contentItem"]["poolId"]
+    json = JSON.parse(response.body())	
+    content_id = json["_contentItem"]["poolId"]
+    print "\n~~ create collection content page #{content_id}: "
+    print response
+	
+	# Ensure creator is set as user!
+	# set filename and link access
+	requests = [
+		{
+			"url"=>"/p/#{content_id}","method"=>"POST","parameters"=>{
+				"sakai:pool-content-created-for" => user_id
+			}
+		}
+	]
+	response = post_batch(requests)
+	print "\n~~ batch update creator for collection: "
+    print response	
+	
+    return content_id
 end
 
 def setAccessOnCollection(collection_id)
