@@ -346,16 +346,18 @@ def	createAndAddContent(content_data, index, user_id, collection_id)
   title = content_data["title"]
   content = content_data["content"]
   
+  print "\n~* creating the content page '#{title}' for the collection..."
+  
   data = {
     "mimeType" =>	"x-sakai/document",
     "structure0" =>	JSON.generate({"page1"=>{"_ref"=>ref_id,"_order"=>index,"_title"=>title,"main"=> {"_ref"=>ref_id,"_order"=>index,"_title"=>title}}})
   }
   response = prim_post("/system/pool/createfile", data)
-  print "\n~~ create content '#{title}': "
-  print response
-  
   json = JSON.parse(response.body())
   content_id = json["_contentItem"]["poolId"]
+  
+  print "\n~* '#{title}' has a content id of #{content_id} "
+  
   
   # set the content
   data = {
@@ -383,8 +385,7 @@ def	createAndAddContent(content_data, index, user_id, collection_id)
         "sakai:allowcomments"=>"true",
         "sakai:showcomments"=>"true"
         }
-    },
-    {"url"=>"/p/#{content_id}.members.json","parameters"=>{":viewer"=>"c-#{content_id}"},"method"=>"POST"}
+    }
   ]
   response = post_batch(requests)
   print "\n~~ batch access for '#{title}': "
@@ -433,9 +434,12 @@ end
 
 def do_stuff
   @userids.each do |user_id|
+  	print "\n~* creating collection for #{user_id}..."
     # create the collection etc
     ref_id = generateWidgetId()
+	print "\n~* collection widget id = #{ref_id}"
     collection_id = createCollection(ref_id, user_id)
+	print "\n~* collection content id = #{collection_id}"
     setAccessOnCollection(collection_id)
     createCollectionGroups(collection_id)
     shareCollectionWithManagers(collection_id, user_id) 
