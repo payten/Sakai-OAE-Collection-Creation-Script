@@ -19,20 +19,20 @@ require 'json'
 @userids = ["payten"]
 
 # collection details
-@collection_title = "Liberal Studies Portfolio"
+@collection_title = "My Collection"
 @collection_access = "everyone" # public | everyone | private
 
 # collection skin
 # NB. that if you set this value, then you will need the following patch 
 # to display skins for pooled content items: https://github.com/payten/3akai-ux/tree/customstylesforcontent
 # 
-#@collection_skin = "/dev/skins/nyu/nyu.liberalstudies.skin.css"
+#@collection_skin = "/dev/skins/path/to/your/skin.css"
 
 # content to add to new collection
 @default_content = [
 	{
-		"title" => "About this Page",
-		"content" => "<p>This is the About this Page default content!</p>"
+		"title" => "My Content",
+		"content" => "<p>This is the content for this page.</p>"
 	}
 ]
 
@@ -405,14 +405,14 @@ def	createAndAddContent(content_data, index, user_id, collection_id)
 			{"url"=>"/p/#{content_id}.members.html","method"=>"POST","parameters"=>{":viewer"=>["everyone","anonymous"]}},
 			{"url"=>"/p/#{content_id}.modifyAce.html","method"=>"POST","parameters"=>{"principalId"=>["everyone"],"privilege@jcr:read"=>"granted"}},
 			{"url"=>"/p/#{content_id}.modifyAce.html","method"=>"POST","parameters"=>{"principalId"=>["anonymous"],"privilege@jcr:read"=>"granted"}},
-			{"url"=>"/p/#{content_id}.members.json","method"=>"POST","parameters"=>{":manager@Delete"=>@user}}
+			{"url"=>"/p/#{content_id}.members.json","method"=>"POST","parameters"=>{":manager"=>user_id,":manager@Delete"=>@user}}
 		]
   elsif @collection_access === "private" then
 		requests = [
 			{"url"=>"/p/#{content_id}.members.html","method"=>"POST","parameters"=>{":viewer@Delete"=>["anonymous","everyone"]}},
 			{"url"=>"/p/#{content_id}.modifyAce.html","method"=>"POST","parameters"=>{"principalId"=>["everyone"],"privilege@jcr:read"=>"denied"}},
 			{"url"=>"/p/#{content_id}.modifyAce.html","method"=>"POST","parameters"=>{"principalId"=>["anonymous"],"privilege@jcr:read"=>"denied"}},
-			{"url"=>"/p/#{content_id}.members.json","method"=>"POST","parameters"=>{":manager@Delete"=>@user}}
+			{"url"=>"/p/#{content_id}.members.json","method"=>"POST","parameters"=>{":manager"=>user_id,":manager@Delete"=>@user}}
 		]
 
   end    
@@ -434,7 +434,7 @@ end
 
 def do_stuff
   @userids.each do |user_id|
-  	print "\n~* creating collection for #{user_id}..."
+  	print "\n\n~* creating collection for #{user_id}..."
     # create the collection etc
     ref_id = generateWidgetId()
 	print "\n~* collection widget id = #{ref_id}"
