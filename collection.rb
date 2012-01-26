@@ -19,20 +19,20 @@ require 'json'
 @userids = ["payten"]
 
 # collection details
-@collection_title = "My Collection"
+@collection_title = "Liberal Studies Portfolio"
 @collection_access = "everyone" # public | everyone | private
 
 # collection skin
 # NB. that if you set this value, then you will need the following patch 
 # to display skins for pooled content items: https://github.com/payten/3akai-ux/tree/customstylesforcontent
 # 
-#@collection_skin = "/dev/skins/path/to/your/skin.css"
+@collection_skin = "/dev/skins/nyu/nyu.liberalstudies.skin.css"
 
 # content to add to new collection
 @default_content = [
 	{
-		"title" => "My Content",
-		"content" => "<p>This is the content for this page.</p>"
+		"title" => "About this Page",
+		"content" => "<p>PUT STUFF ABOUT THIS PAGE HERE!</p>"
 	}
 ]
 
