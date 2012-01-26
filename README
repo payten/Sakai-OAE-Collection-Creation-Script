@@ -1,0 +1,44 @@
+What does it do?
+----------------
+
+This script allows you to batch create a collection for a set of users and to also add default content to this collection.
+
+Configuring this Script
+-----------------------
+
+Initially, you'll need to setup you admin user login credentials and your Sakai OAE instance domain and port:
+
+@url = URI.parse("http://localhost:8080")
+@user = "admin"
+@pass = "admin"
+
+There a few global variables you can edit to customise your collection and the content to create for it.  These are:
+
+@userids  - an array of strings; the user ids of the Sakai users to create the collection for.
+
+@collection_title - string; the title to give the collection content page
+@collection_access - string; the level of access to apply to the collection and the default content added to it.  This can be either "everyone" (logged in users), "public" or "private (for the user only).
+
+@collection_skin - string; the custom stylesheet to be applied to the collection content page.  NB. for this to work you'll need to patch with https://github.com/payten/3akai-ux/tree/customstylesforcontent to enable custom stylesheets for pooled content items.
+
+This script also allows the creation and addition of content pages to the collection.  Define these pages with @default_content e.g.
+
+@default_content = [
+	{
+		"title" => "My Page Title",
+		"content" => "My <i>page's</i> content. <ul><li>List item</li><li>another list item</li></ul>"
+	}
+]
+
+
+How to Run the Script
+---------------------
+
+With your Sakai OAE instance running, in the command line run:
+
+>> ruby collection.rb
+
+NB. This script was developed and tested with Ruby 1.8.7.
+
+
+
