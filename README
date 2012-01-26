@@ -6,13 +6,13 @@ This script allows you to batch create a collection for a set of users and to al
 Configuring this Script
 -----------------------
 
-Initially, you'll need to setup you admin user login credentials and your Sakai OAE instance domain and port:
+Initially, you'll need to setup your admin user login credentials and your Sakai OAE instance domain and port:
 
 @url = URI.parse("http://localhost:8080")
 @user = "admin"
 @pass = "admin"
 
-There a few global variables you can edit to customise your collection and the content to create for it.  These are:
+There are also a few global variables you can modify  to customise your collection and the content to create for it.  These are:
 
 @userids  - an array of strings; the user ids of the Sakai users to create the collection for.
 
