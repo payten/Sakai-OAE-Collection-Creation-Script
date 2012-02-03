@@ -48,7 +48,7 @@ puts @userids
 @default_content = [
 	{
 		"title" => "My Content",
-		"content" => "<p>This is the content for this page.</p>",
+		"content" => "<p>This is the content for this page.</p>"
 	}
 ]
 
@@ -117,28 +117,28 @@ def createCollection(id, user_id)
   	formData = {
 		            "_charset_" => "utf-8",
 		            "mimeType" => "x-sakai/collection",
-					"sakai:copyright" => "creativecommons",
-					"sakai:description" => "",
-					"sakai:permissions" => @collection_access,                
-					"sakai:pooled-content-file-name" => @collection_title,
-					"sakai:pool-content-created-for" => user_id,
-					"sakai:showalways" => "true",
-					"sakai:showalways@TypeHint" => "Boolean",
-					"sakai:showcomments" => "true",
-					"structure0" => JSON.generate({
-						"main"=> {
-							"_ref"=> id,
-							"_order"=> 0,
-							"_title"=> @collection_title,
-							"_nonEditable"=> true,
-							"main"=> {
-								"_ref"=> id,
-								"_order"=> 0,
-								"_title"=> @collection_title,
-								"_nonEditable"=> true
-							}
-						}
-					})
+					      "sakai:copyright" => "creativecommons",
+      					"sakai:description" => "",
+      					"sakai:permissions" => @collection_access,                
+      					"sakai:pooled-content-file-name" => @collection_title,
+      					"sakai:pool-content-created-for" => user_id,
+      					"sakai:showalways" => "true",
+      					"sakai:showalways@TypeHint" => "Boolean",
+      					"sakai:showcomments" => "true",
+      					"structure0" => JSON.generate({
+      						"main"=> {
+      							"_ref"=> id,
+      							"_order"=> 0,
+      							"_title"=> @collection_title,
+      							"_nonEditable"=> true,
+      							"main"=> {
+      								"_ref"=> id,
+      								"_order"=> 0,
+      								"_title"=> @collection_title,
+      								"_nonEditable"=> true
+      							}
+      						}
+      					})
             }
 		
 	if @collection_skin then
@@ -393,16 +393,21 @@ def	createAndAddContent(content_data, index, user_id, collection_id)
   # set filename and link access
   requests = [
      {"url"=>"/p/#{content_id}","method"=>"POST","parameters"=>{
-        "sakai:pooled-content-file-name"=>title,
-		"sakai:pool-content-created-for" => user_id,
-        "sakai:description"=>"",
-        "sakai:permissions"=>@collection_access,
-        "sakai:copyright"=>"creativecommons",
-        "sakai:allowcomments"=>"true",
-        "sakai:showcomments"=>"true"
+          "sakai:pooled-content-file-name"=>title,
+  		    "sakai:pool-content-created-for" => user_id,
+          "sakai:description"=>"",
+          "sakai:permissions"=>@collection_access,
+          "sakai:copyright"=>"creativecommons",
+          "sakai:allowcomments"=>"true",
+          "sakai:showcomments"=>"true"
         }
     }
   ]
+  
+  if content_data.has_key?("skin") then
+    requests[0]["parameters"]["sakai:customStyle"] = content_data["skin"]
+	end
+  
   response = post_batch(requests)
   print "\n~~ batch access for '#{title}': "
   print response
