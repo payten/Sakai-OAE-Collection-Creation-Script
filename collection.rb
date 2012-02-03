@@ -46,8 +46,8 @@ puts @userids
 # content to add to new collection
 @default_content = [
 	{
-		"title" => "About this Page",
-		"content" => "<p>PUT STUFF ABOUT THIS PAGE HERE!</p>"
+		"title" => "About This Portfolio",
+		"content" => "<p>All Global Liberal Studies students use a dynamic ATLAS Portfolio throughout their four years in the program to save and organize material from their courses, internships, experiential learning placements, and global experiences. Among other benefits, this Portfolio will help you choose your concentration and aid in the construction of your Senior Thesis.</p><p>Your Portfolio uses the Collections feature in the ATLAS Network. You can simply drag and drop material from your courses in ATLAS or from your computer into the Portfolio collection and add notes in the details box of the content profile for each piece. You can also make smaller collections of items within your main Portfolio Collection.</p><p>Your Liberal Studies Portfolio is intended to be shared with your advisors and professors to help them get a sense of your interests and development; it extends education beyond and across classes. Your ATLAS personal Library (accessible from your Dashboard) gives you a place for private storage.</p><p>For help with ATLAS, check out the <a href='http://www.nyu.edu/cgi-bin/its/askits/kbasesearch.pl?terms=ATLAS&terms=nyuhome&results=self&submit=Search'>NYU ITS ATLAS support page</a>. Or email Lucy Appert (<a href='mailto:lucy.appert@nyu.edu'>lucy.appert@nyu.edu</a>) or Jen San Miguel (<a href='mailto:jen.sanmiguel@nyu.edu'>jen.sanmiguel@nyu.edu</a>).</p>" 
 	}
 ]
 
