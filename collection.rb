@@ -4,6 +4,21 @@ require 'net/http'
 require 'rubygems'
 require 'json'
 
+@userids = []
+if ARGV.size === 1
+  userids_file = username = ARGV[0]
+  File.open(userids_file, "r") { |f|
+      while line = f.gets  
+        userid = line.strip
+        @userids.push(userid) unless userid.empty?
+      end
+  }
+else
+  @userids = ["payten"]
+end
+
+puts @userids
+
 #######################################
 # Script Customisations!
 #
@@ -16,7 +31,7 @@ require 'json'
 
 
 # users to create collection for
-@userids = ["payten"]
+
 
 # collection details
 @collection_title = "Liberal Studies Portfolio"
