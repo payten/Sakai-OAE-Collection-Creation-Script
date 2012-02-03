@@ -44,10 +44,11 @@ puts @userids
 #@collection_skin = "/dev/skins/path/to/your/skin.css"
 
 # content to add to new collection
+# if you want to set a skin (like above) include a "skin" along with "title" and "description"
 @default_content = [
 	{
 		"title" => "My Content",
-		"content" => "<p>This is the content for this page.</p>"
+		"content" => "<p>This is the content for this page.</p>",
 	}
 ]
 
