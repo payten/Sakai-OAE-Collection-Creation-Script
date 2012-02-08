@@ -14,7 +14,7 @@ if ARGV.size === 1
       end
   }
 else
-  @userids = ["payten"]
+  @userids = ["foobar"]
 end
 
 puts @userids
@@ -57,6 +57,15 @@ puts @userids
 #######################################
 # Script Stuff
 #
+
+def get(path)
+  Net::HTTP.start(@url.host, @url.port) do |http|
+	#print "-- GET: #{path}\n"
+      req = Net::HTTP::Get.new(path)
+      req.basic_auth @user, @pass
+      return http.request(req)
+  end
+end
 
 def get_json(path, raw = false)
     Net::HTTP.start(@url.host, @url.port) do |http|
@@ -109,6 +118,17 @@ end
 
 def generateWidgetId()
 	"id" + (1_000_000 + rand(10_000_000 - 1_000_000)).to_s
+end
+
+def userExists(user_id) 
+  print "\n ~~Checking if #{user_id} exists: "
+  response = get("/~#{user_id}/public/authprofile.profile.json")
+  print response
+  
+  if response.code === '200' then
+    return true
+  end
+  false
 end
 
 def createCollection(id, user_id)
@@ -456,6 +476,11 @@ end
 def do_stuff
   @userids.each do |user_id|
   	print "\n\n~* creating collection for #{user_id}..."
+  	# check user exists
+    unless userExists(user_id) then
+      print "\n~**** User #{user_id} doesn't exist!!!\n"
+      next;
+    end
     # create the collection etc
     ref_id = generateWidgetId()
 	print "\n~* collection widget id = #{ref_id}"
