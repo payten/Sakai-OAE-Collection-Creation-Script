@@ -16,6 +16,8 @@ There are also a few global variables you can modify  to customise your collecti
 
 @userids  - an array of strings; the user ids of the Sakai users to create the collection for.
 
+Alternatively, list all the userids in the users.txt file (one per line) and add this file's location as an arg when running the script (see below).
+
 @collection_title - string; the title to give the collection content page
 @collection_access - string; the level of access to apply to the collection and the default content added to it.  This can be either "everyone" (logged in users), "public" or "private (for the user only).
 
@@ -38,7 +40,8 @@ With your Sakai OAE instance running, in the command line run:
 
 >> ruby collection.rb
 
+If you wish to use users.txt to seed the script:
+
+>> ruby collection.rb users.txt
+
 NB. This script was developed and tested with Ruby 1.8.7.
-
-
-

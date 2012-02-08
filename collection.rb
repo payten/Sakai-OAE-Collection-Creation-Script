@@ -14,7 +14,7 @@ if ARGV.size === 1
       end
   }
 else
-  @userids = ["payten"]
+  @userids = ["foobar"]
 end
 
 puts @userids
@@ -44,6 +44,7 @@ puts @userids
 @collection_skin = "/dev/skins/nyu/nyu.liberalstudies.skin.css"
 
 # content to add to new collection
+# if you want to set a skin (like above) include a "skin" along with "title" and "description"
 @default_content = [
 	{
 		"title" => "About This Portfolio",
@@ -56,6 +57,15 @@ puts @userids
 #######################################
 # Script Stuff
 #
+
+def get(path)
+  Net::HTTP.start(@url.host, @url.port) do |http|
+	#print "-- GET: #{path}\n"
+      req = Net::HTTP::Get.new(path)
+      req.basic_auth @user, @pass
+      return http.request(req)
+  end
+end
 
 def get_json(path, raw = false)
     Net::HTTP.start(@url.host, @url.port) do |http|
@@ -110,34 +120,45 @@ def generateWidgetId()
 	"id" + (1_000_000 + rand(10_000_000 - 1_000_000)).to_s
 end
 
+def userExists(user_id) 
+  print "\n ~~Checking if #{user_id} exists: "
+  response = get("/~#{user_id}/public/authprofile.profile.json")
+  print response
+  
+  if response.code === '200' then
+    return true
+  end
+  false
+end
+
 def createCollection(id, user_id)
     # 1. create the base node for the collection
     # the collection data
   	formData = {
 		            "_charset_" => "utf-8",
 		            "mimeType" => "x-sakai/collection",
-					"sakai:copyright" => "creativecommons",
-					"sakai:description" => "",
-					"sakai:permissions" => @collection_access,                
-					"sakai:pooled-content-file-name" => @collection_title,
-					"sakai:pool-content-created-for" => user_id,
-					"sakai:showalways" => "true",
-					"sakai:showalways@TypeHint" => "Boolean",
-					"sakai:showcomments" => "true",
-					"structure0" => JSON.generate({
-						"main"=> {
-							"_ref"=> id,
-							"_order"=> 0,
-							"_title"=> @collection_title,
-							"_nonEditable"=> true,
-							"main"=> {
-								"_ref"=> id,
-								"_order"=> 0,
-								"_title"=> @collection_title,
-								"_nonEditable"=> true
-							}
-						}
-					})
+					      "sakai:copyright" => "creativecommons",
+      					"sakai:description" => "",
+      					"sakai:permissions" => @collection_access,                
+      					"sakai:pooled-content-file-name" => @collection_title,
+      					"sakai:pool-content-created-for" => user_id,
+      					"sakai:showalways" => "true",
+      					"sakai:showalways@TypeHint" => "Boolean",
+      					"sakai:showcomments" => "true",
+      					"structure0" => JSON.generate({
+      						"main"=> {
+      							"_ref"=> id,
+      							"_order"=> 0,
+      							"_title"=> @collection_title,
+      							"_nonEditable"=> true,
+      							"main"=> {
+      								"_ref"=> id,
+      								"_order"=> 0,
+      								"_title"=> @collection_title,
+      								"_nonEditable"=> true
+      							}
+      						}
+      					})
             }
 		
 	if @collection_skin then
@@ -392,16 +413,21 @@ def	createAndAddContent(content_data, index, user_id, collection_id)
   # set filename and link access
   requests = [
      {"url"=>"/p/#{content_id}","method"=>"POST","parameters"=>{
-        "sakai:pooled-content-file-name"=>title,
-		"sakai:pool-content-created-for" => user_id,
-        "sakai:description"=>"",
-        "sakai:permissions"=>@collection_access,
-        "sakai:copyright"=>"creativecommons",
-        "sakai:allowcomments"=>"true",
-        "sakai:showcomments"=>"true"
+          "sakai:pooled-content-file-name"=>title,
+  		    "sakai:pool-content-created-for" => user_id,
+          "sakai:description"=>"",
+          "sakai:permissions"=>@collection_access,
+          "sakai:copyright"=>"creativecommons",
+          "sakai:allowcomments"=>"true",
+          "sakai:showcomments"=>"true"
         }
     }
   ]
+  
+  if content_data.has_key?("skin") then
+    requests[0]["parameters"]["sakai:customStyle"] = content_data["skin"]
+	end
+  
   response = post_batch(requests)
   print "\n~~ batch access for '#{title}': "
   print response
@@ -450,6 +476,11 @@ end
 def do_stuff
   @userids.each do |user_id|
   	print "\n\n~* creating collection for #{user_id}..."
+  	# check user exists
+    unless userExists(user_id) then
+      print "\n~**** User #{user_id} doesn't exist!!!\n"
+      next;
+    end
     # create the collection etc
     ref_id = generateWidgetId()
 	print "\n~* collection widget id = #{ref_id}"
