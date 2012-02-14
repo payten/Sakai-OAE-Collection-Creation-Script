@@ -14,7 +14,7 @@ if ARGV.size === 1
       end
   }
 else
-  @userids = ["foobar"]
+  @userids = ["payten"]
 end
 
 puts @userids
@@ -344,6 +344,10 @@ def shareCollectionWithGroups(collection_id)
   response = prim_post("/p/#{collection_id}.members.json", {":manager"=>"c-#{collection_id}-members"})
   print "\n~~ share with pseudo groups (members): "
   print response
+  # NYU only - add pseudo group to enable custom portfolio search 
+  response = prim_post("/p/#{collection_id}.members.json", {":viewer"=>"g-portfolio-search"})
+  print "\n~~ share with g-portfolio-search (members): "
+  print response  
 end
 
 def removeCreatorAsManager(collection_id)
