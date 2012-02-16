@@ -34,7 +34,7 @@ puts @userids
 
 
 # collection details
-@collection_title = "My LS Portfolio"
+@collection_title = "LS Portfolio"
 @collection_access = "private" # public | everyone | private
 
 # collection skin
@@ -126,6 +126,14 @@ def userExists(user_id)
   print response
   
   if response.code === '200' then
+    
+     # for NYU - get the user's name for the collection title
+     json = JSON.parse(response.body())
+     first_name = json["basic"]["elements"]["firstName"]["value"]
+     last_name = json["basic"]["elements"]["lastName"]["value"]
+
+     @collection_title = "#{first_name} #{last_name} - #{@collection_title}"
+    
     return true
   end
   false
@@ -169,7 +177,7 @@ def createCollection(id, user_id)
     response = prim_post("/system/pool/createfile", formData)
     json = JSON.parse(response.body())	
     content_id = json["_contentItem"]["poolId"]
-    print "\n~~ create collection content page #{content_id}: "
+    print "\n~~ create collection '#{@collection_title}' content page #{content_id}: "
     print response
 	
 	# Ensure creator is set as user!
