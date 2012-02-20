@@ -132,7 +132,7 @@ def userExists(user_id)
      first_name = json["basic"]["elements"]["firstName"]["value"]
      last_name = json["basic"]["elements"]["lastName"]["value"]
 
-     @collection_title = "#{first_name} #{last_name} - #{@collection_title}"
+     @custom_collection_title = "#{first_name} #{last_name} - #{@collection_title}"
     
     return true
   end
@@ -147,8 +147,8 @@ def createCollection(id, user_id)
 		            "mimeType" => "x-sakai/collection",
 					      "sakai:copyright" => "creativecommons",
       					"sakai:description" => "",
-      					"sakai:permissions" => @collection_access,                
-      					"sakai:pooled-content-file-name" => @collection_title,
+      					"sakai:permissions" => @custom_collection_title,                
+      					"sakai:pooled-content-file-name" => @custom_collection_title,
       					"sakai:pool-content-created-for" => user_id,
       					"sakai:showalways" => "true",
       					"sakai:showalways@TypeHint" => "Boolean",
@@ -157,12 +157,12 @@ def createCollection(id, user_id)
       						"main"=> {
       							"_ref"=> id,
       							"_order"=> 0,
-      							"_title"=> @collection_title,
+      							"_title"=> @custom_collection_title,
       							"_nonEditable"=> true,
       							"main"=> {
       								"_ref"=> id,
       								"_order"=> 0,
-      								"_title"=> @collection_title,
+      								"_title"=> @custom_collection_title,
       								"_nonEditable"=> true
       							}
       						}
@@ -177,7 +177,7 @@ def createCollection(id, user_id)
     response = prim_post("/system/pool/createfile", formData)
     json = JSON.parse(response.body())	
     content_id = json["_contentItem"]["poolId"]
-    print "\n~~ create collection '#{@collection_title}' content page #{content_id}: "
+    print "\n~~ create collection '#{@custom_collection_title}' content page #{content_id}: "
     print response
 	
 	# Ensure creator is set as user!
@@ -240,7 +240,7 @@ def createCollectionGroups(collection_id)
               "sakai:excludeSearch"=> true,
               "sakai:pseudoGroup"=> true,
               "sakai:pseudoGroup@TypeHint"=> "Boolean",
-              "sakai:parent-group-title"=> @collection_title,
+              "sakai:parent-group-title"=> @custom_collection_title,
               "sakai:parent-group-id"=> group_id,
               "sakai:role-title"=> "MANAGER",
               "sakai:role-title-plural"=> "MANAGERS"
@@ -259,7 +259,7 @@ def createCollectionGroups(collection_id)
               "sakai:excludeSearch"=> true,
               "sakai:pseudoGroup"=> true,
               "sakai:pseudoGroup@TypeHint"=> "Boolean",
-              "sakai:parent-group-title"=> @collection_title,
+              "sakai:parent-group-title"=> @custom_collection_title,
               "sakai:parent-group-id"=> group_id,
               "sakai:role-title"=> "MEMBER",
               "sakai:role-title-plural"=> "MEMBERS"
@@ -271,7 +271,7 @@ def createCollectionGroups(collection_id)
           "method" => "POST",
           "parameters" => {
               ":name"=> group_id,
-              "sakai:group-title"=> @collection_title,
+              "sakai:group-title"=> @custom_collection_title,
               "sakai:roles"=> "[{\"id\":\"managers\",\"title\":\"MANAGER\",\"titlePlural\":\"MANAGERS\",\"isManagerRole\":true,\"manages\":[\"members\"]},{\"id\":\"members\",\"title\":\"MEMBER\",\"titlePlural\":\"MEMBERS\",\"isManagerRole\":false}]",
               "sakai:group-id"=> group_id,
               "sakai:category"=> "collection",
